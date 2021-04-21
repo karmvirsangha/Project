@@ -1,0 +1,76 @@
+#include statement was automatically added by the Particle IDE.
+#include <HC_SR04.h>
+
+double inches = 0.0;
+double cm = 0.0;
+// Led pin at Arduino pin 9
+const int ledPin=D9;       
+// Photoresistor at Arduino analog pin A0
+const int pResistor = A5;
+
+//Variables
+
+// Store value from photoresistor (0-1023)
+int value;				  
+int trigPin = A0;
+int echoPin = D0;
+int led1 = D5;
+
+const int buzzer = D6;
+char Distance[4];
+
+HC_SR04 rangefinder = HC_SR04(trigPin, echoPin);
+void setup() 
+
+{
+        // Set lepPin - 9 pin as an output
+        pinMode(ledPin, OUTPUT); 
+        // Set pResistor - A0 pin as an input (optional)
+        pinMode(pResistor, INPUT);
+        pinMode(led,OUTPUT);
+        pinMode(led1,OUTPUT);
+        pinMode(buzzer, OUTPUT);
+        digitalWrite(buzzer, LOW);
+}
+
+void loop() 
+{
+    cm = rangefinder.getDistanceCM();
+    inches = rangefinder.getDistanceInch();
+    delay(100);
+    sprintf(Distance, "%d", cm);  
+     value = analogRead(pResistor);
+      //You can change value "25"
+      
+  if (value > 25){
+    digitalWrite(ledPin, HIGH);  //Turn led off for PhotoResitor
+  }
+  else{
+    digitalWrite(ledPin, LOW); //Turn led on for PhotoResitor
+}
+    
+if(cm < 6){
+    
+        digitalWrite(led, HIGH);
+        digitalWrite(led1, LOW);
+     
+        digitalWrite(ledPin, LOW);
+        digitalWrite(buzzer, HIGH);
+        
+        tone(buzzer, 10000); // Send 1KHz sound signal.
+        
+        delay(1000);        // .for 1 sec
+        
+        tone(buzzer, 1000); // Send 1KHz sound signal.
+        
+        delay(1000);        // ..for 1 sec
+     
+ }
+  else if( cm > 8 && cm < 16 ){
+        digitalWrite(led, LOW);
+        digitalWrite(led1, HIGH);
+        digitalWrite(buzzer, LOW);
+        
+ }
+    delay(100);
+}
